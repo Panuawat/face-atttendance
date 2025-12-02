@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Face Attendance System
 
-## Getting Started
+ระบบบันทึกเวลาเข้างานด้วยการสแกนใบหน้า (Face Recognition) พัฒนาด้วย Next.js และ Prisma
 
-First, run the development server:
+## 🚀 คุณสมบัติ (Features)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+*   **Face Recognition**: ตรวจจับและระบุตัวตนด้วยใบหน้าแบบ Real-time ผ่านกล้อง
+*   **Check-in System**: บันทึกเวลาเข้างานอัตโนมัติเมื่อสแกนใบหน้าผ่าน
+*   **User Registration**: ลงทะเบียนผู้ใช้งานใหม่พร้อมถ่ายรูปเก็บเป็นข้อมูลฝึกสอน (Training Data)
+*   **Attendance History**: ดูประวัติการเข้างาน ย้อนหลังได้
+*   **Dashboard**: แสดงภาพรวมข้อมูลการเข้างาน (กำลังพัฒนา)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ เทคโนโลยีที่ใช้ (Tech Stack)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+*   **Frontend**: [Next.js](https://nextjs.org/) (App Router), React
+*   **Backend**: Next.js API Routes
+*   **Database**: MySQL (ผ่าน [Prisma ORM](https://www.prisma.io/))
+*   **AI/ML**: [face-api.js](https://github.com/justadudewhohacks/face-api.js) สำหรับการตรวจจับและจดจำใบหน้า
+*   **Styling**: Tailwind CSS (ถ้ามี) / CSS Modules
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ⚙️ การติดตั้งและใช้งาน (Installation)
 
-## Learn More
+1.  **Clone Project**
+    ```bash
+    git clone https://github.com/your-username/face-attendance.git
+    cd face-attendance
+    ```
 
-To learn more about Next.js, take a look at the following resources:
+2.  **ติดตั้ง Dependencies**
+    ```bash
+    npm install
+    ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3.  **ตั้งค่า Database**
+    *   สร้างไฟล์ `.env` และกำหนดค่า `DATABASE_URL`
+    ```env
+    DATABASE_URL="mysql://USER:PASSWORD@HOST:PORT/DATABASE"
+    ```
+    *   รันคำสั่ง Prisma เพื่อสร้างตารางในฐานข้อมูล
+    ```bash
+    npx prisma migrate dev
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4.  **รันโปรเจกต์**
+    ```bash
+    npm run dev
+    ```
+    เปิด [http://localhost:3000](http://localhost:3000) ในเบราว์เซอร์
 
-## Deploy on Vercel
+## 📝 หมายเหตุ
+*   โปรเจกต์นี้จำเป็นต้องใช้กล้อง (Webcam) ในการทำงาน
+*   โมเดล AI จะถูกโหลดเมื่อเริ่มต้นใช้งานครั้งแรก อาจใช้เวลาสักครู่
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🤝 Contributing
+ยินดีต้อนรับทุกการแก้ไขและข้อเสนอแนะ สามารถ Pull Request หรือเปิด Issue ได้เลยครับ

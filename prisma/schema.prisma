@@ -1,0 +1,22 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Attendance {
+  id        Int      @id @default(autoincrement())
+  name      String
+  timestamp DateTime @default(now())
+  status    String   @default("present")
+}
+
+model Person {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  photoCount Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
