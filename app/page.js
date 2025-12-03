@@ -207,12 +207,24 @@ export default function Home() {
             <h1 className="text-3xl font-bold mb-4">Face Attendance</h1>
 
             {/* Navigation Buttons */}
-            <div className="flex gap-4 mb-4">
+            <div className="flex gap-4 mb-4 flex-wrap">
+                <Link
+                    href="/dashboard"
+                    className="px-6 py-2 bg-cyan-600 hover:bg-cyan-700 rounded-lg font-semibold transition-colors"
+                >
+                    📊 Dashboard
+                </Link>
                 <Link
                     href="/register"
                     className="px-6 py-2 bg-green-600 hover:bg-green-700 rounded-lg font-semibold transition-colors"
                 >
                     ➕ ลงทะเบียนคนใหม่
+                </Link>
+                <Link
+                    href="/people"
+                    className="px-6 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold transition-colors"
+                >
+                    👥 จัดการผู้ใช้
                 </Link>
                 <Link
                     href="/history"
@@ -230,8 +242,8 @@ export default function Home() {
                         onClick={startScanning}
                         disabled={!modelsLoaded || !faceMatcher}
                         className={`px-8 py-3 rounded-full font-bold text-lg shadow-lg transition-all transform hover:scale-105 ${modelsLoaded && faceMatcher
-                                ? 'bg-green-500 hover:bg-green-600 text-white'
-                                : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                            ? 'bg-green-500 hover:bg-green-600 text-white'
+                            : 'bg-gray-600 text-gray-400 cursor-not-allowed'
                             }`}
                     >
                         ▶ เริ่มสแกน
