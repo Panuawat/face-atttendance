@@ -65,12 +65,25 @@ export default function RegisterPage() {
         }
     };
 
+    const intervalRef = useRef(null);
+
+    // Cleanup interval on unmount
+    useEffect(() => {
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+        };
+    }, []);
+
     // Detect faces continuously
     const handleVideoPlay = () => {
         const faceapi = faceApiRef.current;
         if (!faceapi) return;
 
-        setInterval(async () => {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+
+        intervalRef.current = setInterval(async () => {
             if (!videoRef.current || !canvasRef.current) return;
 
             const displaySize = {
@@ -78,24 +91,34 @@ export default function RegisterPage() {
                 height: videoRef.current.height
             };
 
-            faceapi.matchDimensions(canvasRef.current, displaySize);
+            try {
+                faceapi.matchDimensions(canvasRef.current, displaySize);
 
-            const detections = await faceapi.detectAllFaces(videoRef.current);
-            const resizedDetections = faceapi.resizeResults(detections, displaySize);
+                const detections = await faceapi.detectAllFaces(videoRef.current);
 
-            const canvas = canvasRef.current;
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                // Check if component is still mounted and refs are valid after await
+                if (!videoRef.current || !canvasRef.current) return;
 
-            // Draw face boxes
-            resizedDetections.forEach((detection) => {
-                const box = detection.box;
-                ctx.strokeStyle = '#00ff00';
-                ctx.lineWidth = 3;
-                ctx.strokeRect(box.x, box.y, box.width, box.height);
-            });
+                const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
-            setFaceDetected(resizedDetections.length > 0);
+                const canvas = canvasRef.current;
+                const ctx = canvas.getContext('2d');
+                if (!ctx) return;
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Draw face boxes
+                resizedDetections.forEach((detection) => {
+                    const box = detection.box;
+                    ctx.strokeStyle = '#00ff00';
+                    ctx.lineWidth = 3;
+                    ctx.strokeRect(box.x, box.y, box.width, box.height);
+                });
+
+                setFaceDetected(resizedDetections.length > 0);
+            } catch (error) {
+                console.error("Detection error:", error);
+            }
         }, 100);
     };
 
@@ -214,8 +237,8 @@ export default function RegisterPage() {
                                 onClick={capturePhoto}
                                 disabled={!cameraReady || !faceDetected}
                                 className={`mt-4 w-full px-6 py-4 rounded-lg font-bold text-lg transition-colors ${cameraReady && faceDetected
-                                        ? 'bg-blue-600 hover:bg-blue-700'
-                                        : 'bg-gray-600 cursor-not-allowed'
+                                    ? 'bg-blue-600 hover:bg-blue-700'
+                                    : 'bg-gray-600 cursor-not-allowed'
                                     }`}
                             >
                                 📸 ถ่ายรูป
@@ -277,8 +300,8 @@ export default function RegisterPage() {
                             onClick={handleSubmit}
                             disabled={isSubmitting || !name.trim() || capturedImages.length === 0}
                             className={`w-full px-6 py-4 rounded-lg font-bold text-lg transition-colors ${!isSubmitting && name.trim() && capturedImages.length > 0
-                                    ? 'bg-green-600 hover:bg-green-700'
-                                    : 'bg-gray-600 cursor-not-allowed'
+                                ? 'bg-green-600 hover:bg-green-700'
+                                : 'bg-gray-600 cursor-not-allowed'
                                 }`}
                         >
                             {isSubmitting ? '⏳ กำลังลงทะเบียน...' : '✅ ลงทะเบียน'}
